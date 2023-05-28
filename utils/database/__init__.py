@@ -12,7 +12,7 @@ class DatabaseManager:
 
     def __init__(self, url: Union[str, URL], engin_options: Union[EngineOptions, None] = None):
         if engin_options is None:
-            engine_options = {"echo": "debug", "pool_pre_ping": True}
+            engine_options = {"echo": True, "pool_pre_ping": True, }
         self.engine = create_async_engine(url, **engine_options)
 
     async def initialize(self, session_options: Union[dict[str, Any], None] = None):

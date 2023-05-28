@@ -2,6 +2,7 @@ import atexit
 import pkgutil
 import kayaku
 import creart
+import logging
 from loguru import logger
 from kayaku import bootstrap, save_all
 from graia.ariadne.app import Ariadne
@@ -10,7 +11,9 @@ from graia.ariadne.connection.config import (
     WebsocketClientConfig,
 )
 from graia.ariadne.connection.config import config as networkCFG
+from graia.ariadne.util import RichLogInstallOptions
 from graia.saya import Saya
+from graiax.playwright import PlaywrightService
 from arclet.alconna.graia.saya import AlconnaBehaviour
 from launart import Launart, LaunartBehaviour
 
@@ -29,13 +32,24 @@ creart.it(AlconnaBehaviour)
 manager = Launart()
 saya.install_behaviours(LaunartBehaviour(manager))
 manager.add_service(DatabaseInitService())
-Ariadne.config(launch_manager=manager, install_log=True)
+manager.add_service(PlaywrightService())
+Ariadne.config(
+    launch_manager=manager,
+    install_log=RichLogInstallOptions(level=basic_cfg.debugLevel),
+)
+
+for name in logging.root.manager.loggerDict:
+    _logger = logging.getLogger(name)
+    # logger.debug(f"{name}:{_logger}")
+    if "sqlalchemy" in name:
+        for handler in _logger.handlers:
+            _logger.removeHandler(handler)
 
 with saya.module_context():
     for module_info in pkgutil.iter_modules(["cores"]):
         if module_info.name.startswith("_"):
             continue
-        saya.require(f"modules.{module_info.name}")
+        saya.require(f"cores.{module_info.name}")
 logger.info("Core Loded!")
 
 

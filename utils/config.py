@@ -22,6 +22,7 @@ class AdminConfig:
 
 @config("bot")
 class BasicConfig:
+    debugLevel: str = "DEBUG"
     databaseUrl: str = "sqlite+aiosqlite:///data/database.db"
     """数据库地址"""
     miraiApiHttp: MAHConfig = MAHConfig()
@@ -30,4 +31,14 @@ class BasicConfig:
     """机器人管理相关配置"""
 
 
+@config("modules")
+class ModulesConfig:
+    enabled: bool = True
+    """是否允许加载模块"""
+
+    globalDisabledModules: list[str] = field(default_factory=lambda: [])
+    disabledGroups: dict[str, list[int]] = field(default_factory=lambda: {})
+
+
 basic_cfg = create(BasicConfig)
+modules_cfg = create(ModulesConfig, flush=True)

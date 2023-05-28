@@ -14,6 +14,8 @@ dependencies = [
     "graiax-shortcut>=0.3.0",
     "arclet-alconna-graia>=0.14.0",
     "arclet-alconna-ariadne>=0.14.0",
+    "SQLAlchemy>=2.0.15",
+    "aiosqlite>=0.19.0",
 ]
 requires-python = ">=3.9"
 license = {text = "MIT"}

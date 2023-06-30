@@ -77,5 +77,7 @@ logger.add(
     "./cache/logs/debuglogs", rotation="00:00", retention="10 days", compression="zip"
 )
 
-
-Ariadne.launch_blocking()
+try:
+    Ariadne.launch_blocking()
+except KeyboardInterrupt:
+    Ariadne.stop()
